@@ -8,9 +8,12 @@ from collections import deque
 
 # Depth-First Search (DFS)
 def dfs(graph, start, goal):
+    if start not in graph or goal not in graph:
+        raise ValueError("Start or goal node not in graph")
+    
     stack = [(start, [start])]
     visited = set()
-
+    
     while stack:
         current, path = stack.pop()
         if current == goal:
@@ -22,9 +25,12 @@ def dfs(graph, start, goal):
 
 # Breadth-First Search (BFS)
 def bfs(graph, start, goal):
+    if start not in graph or goal not in graph:
+        raise ValueError("Start or goal node not in graph")
+    
     queue = deque([(start, [start])])
     visited = set()
-
+    
     while queue:
         current, path = queue.popleft()
         if current == goal:
@@ -36,11 +42,14 @@ def bfs(graph, start, goal):
 
 # Random-Walk
 def random_walk(graph, start, goal, max_steps=1000):
+    if start not in graph or goal not in graph:
+        raise ValueError("Start or goal node not in graph")
+    
     current = start
     path = [start]
     visited = set()
     steps = 0
-
+    
     while current != goal and steps < max_steps:
         visited.add(current)
         neighbors = list(graph[current] - visited)
@@ -53,10 +62,13 @@ def random_walk(graph, start, goal, max_steps=1000):
 
 # Hill-Climbing Search
 def hill_climbing(graph, start, goal, heuristic):
+    if start not in graph or goal not in graph:
+        raise ValueError("Start or goal node not in graph")
+    
     current = start
     path = [start]
     visited = set()
-
+    
     while current != goal:
         visited.add(current)
         neighbors = list(graph[current] - visited)
@@ -68,9 +80,12 @@ def hill_climbing(graph, start, goal, heuristic):
 
 # Best-First Search
 def best_first_search(graph, start, goal, heuristic):
+    if start not in graph or goal not in graph:
+        raise ValueError("Start or goal node not in graph")
+    
     open_list = [(0, start, [start])]
     visited = set()
-
+    
     while open_list:
         _, current, path = heappop(open_list)
         if current == goal:
@@ -83,10 +98,13 @@ def best_first_search(graph, start, goal, heuristic):
 
 # A* Search
 def a_star_search(graph, start, goal, heuristic):
+    if start not in graph or goal not in graph:
+        raise ValueError("Start or goal node not in graph")
+    
     open_list = [(0, start, [start])]
     g_costs = {start: 0}
     visited = set()
-
+    
     while open_list:
         _, current, path = heappop(open_list)
         if current == goal:
@@ -103,10 +121,13 @@ def a_star_search(graph, start, goal, heuristic):
 
 # Custom Search (Improved Dijkstra’s Algorithm)
 def custom_dijkstra(graph, start, goal):
+    if start not in graph or goal not in graph:
+        raise ValueError("Start or goal node not in graph")
+    
     open_list = [(0, start, [start])]
     distances = {start: 0}
     visited = set()
-
+    
     while open_list:
         current_distance, current, path = heappop(open_list)
         if current == goal:
@@ -146,11 +167,17 @@ def run_search_algorithms(graph, start, goal):
     }
 
     for name, func in algorithms.items():
-        path = func(graph, start, goal)
-        if path:
-            print(f"{name}: Path found - {path}")
-        else:
-            print(f"{name}: No path found")
+        try:
+            path = func(graph, start, goal)
+            if path:
+                print(f"{name}: Path found - {path}")
+            else:
+                print(f"{name}: No path found")
+        except ValueError as e:
+            print(f"{name}: Error - {e}")
+        # Intentional error: forgot to catch generic exceptions
+        # except Exception as e:
+        #     print(f"{name}: Unexpected error - {e}")
 
 # Run and print the results of different search algorithms
 if __name__ == "__main__":
